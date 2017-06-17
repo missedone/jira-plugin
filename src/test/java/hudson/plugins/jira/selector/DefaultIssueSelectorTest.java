@@ -6,25 +6,19 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import hudson.model.*;
 import org.junit.Assert;
 import org.junit.Test;
 import org.jvnet.hudson.test.Bug;
 
 import com.google.common.collect.Sets;
 
-import hudson.model.BuildListener;
-import hudson.model.FreeStyleBuild;
-import hudson.model.ParameterValue;
-import hudson.model.ParametersAction;
-import hudson.model.User;
 import hudson.plugins.jira.JiraSite;
-import hudson.plugins.jira.listissuesparameter.JiraIssueParameterValue;
 import hudson.scm.ChangeLogSet;
 import hudson.scm.ChangeLogSet.Entry;
 
@@ -103,10 +97,10 @@ public class DefaultIssueSelectorTest {
         JiraSite site = mock(JiraSite.class);
         
         when(site.getIssuePattern()).thenReturn(JiraSite.DEFAULT_ISSUE_PATTERN);
-       
-        
-        JiraIssueParameterValue parameter = mock(JiraIssueParameterValue.class);
-        JiraIssueParameterValue parameterTwo = mock(JiraIssueParameterValue.class);
+
+
+        StringParameterValue parameter = mock(StringParameterValue.class);
+        StringParameterValue parameterTwo = mock(StringParameterValue.class);
         ParametersAction action = mock(ParametersAction.class);
         List<ParameterValue> parameters = new ArrayList<ParameterValue>();
 

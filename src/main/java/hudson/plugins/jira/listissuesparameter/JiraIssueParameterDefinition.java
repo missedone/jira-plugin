@@ -21,6 +21,7 @@ import hudson.cli.CLICommand;
 import hudson.model.Job;
 import hudson.model.ParameterDefinition;
 import hudson.model.ParameterValue;
+import hudson.model.StringParameterValue;
 import hudson.plugins.jira.JiraSession;
 import hudson.plugins.jira.JiraSite;
 import net.sf.json.JSONObject;
@@ -53,19 +54,19 @@ public class JiraIssueParameterDefinition extends ParameterDefinition {
             return null;
         }
 
-        return new JiraIssueParameterValue(getName(), values[0]);
+        return new StringParameterValue(getName(), values[0]);
     }
 
     @Override
     public ParameterValue createValue(StaplerRequest req, JSONObject formData) {
-        JiraIssueParameterValue value = req.bindJSON(
-                JiraIssueParameterValue.class, formData);
+        StringParameterValue value = req.bindJSON(
+                StringParameterValue.class, formData);
         return value;
     }
 
     @Override
     public ParameterValue createValue(CLICommand command, String value) throws IOException, InterruptedException {
-        return new JiraIssueParameterValue(getName(), value);
+        return new StringParameterValue(getName(), value);
     }
 
     public List<JiraIssueParameterDefinition.Result> getIssues() throws IOException {

@@ -5,25 +5,18 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import hudson.model.*;
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.google.common.collect.Sets;
 
-import hudson.model.BuildListener;
-import hudson.model.FreeStyleBuild;
-import hudson.model.ParameterValue;
-import hudson.model.ParametersAction;
-import hudson.model.Run;
 import hudson.plugins.jira.JiraCarryOverAction;
 import hudson.plugins.jira.JiraSite;
-import hudson.plugins.jira.listissuesparameter.JiraIssueParameterValue;
-import hudson.plugins.jira.selector.perforce.JobIssueSelector;
 import hudson.scm.ChangeLogSet;
 
 
@@ -37,8 +30,8 @@ public abstract class JobIssueSelectorTest {
         ChangeLogSet changeLogSet = mock(ChangeLogSet.class);
         BuildListener listener = mock(BuildListener.class);
         JiraSite jiraSite = mock(JiraSite.class);
-        JiraIssueParameterValue parameter = mock(JiraIssueParameterValue.class);
-        JiraIssueParameterValue parameterTwo = mock(JiraIssueParameterValue.class);
+        StringParameterValue parameter = mock(StringParameterValue.class);
+        StringParameterValue parameterTwo = mock(StringParameterValue.class);
         ParametersAction action = mock(ParametersAction.class);
         List<ParameterValue> parameters = new ArrayList<ParameterValue>();
 

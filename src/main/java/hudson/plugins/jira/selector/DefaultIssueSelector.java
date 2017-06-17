@@ -11,22 +11,17 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 
+import hudson.model.*;
+import hudson.plugins.jira.listissuesparameter.JiraIssueParameterDefinition;
 import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 import hudson.Extension;
-import hudson.model.AbstractBuild;
-import hudson.model.Descriptor;
-import hudson.model.ParameterValue;
-import hudson.model.ParametersAction;
-import hudson.model.Run;
-import hudson.model.TaskListener;
 import hudson.model.AbstractBuild.DependencyChange;
 import hudson.plugins.jira.JiraCarryOverAction;
 import hudson.plugins.jira.JiraSite;
 import hudson.plugins.jira.Messages;
 import hudson.plugins.jira.RunScmChangeExtractor;
-import hudson.plugins.jira.listissuesparameter.JiraIssueParameterValue;
 import hudson.scm.ChangeLogSet;
 import hudson.scm.ChangeLogSet.Entry;
 
@@ -145,13 +140,18 @@ public class DefaultIssueSelector extends AbstractIssueSelector {
         // Now look for any JiraIssueParameterValue's set in the build
         // Implements JENKINS-12312
         ParametersAction parameters = build.getAction(ParametersAction.class);
-
         if (parameters != null) {
-            for (ParameterValue val : parameters.getParameters()) {
-                if (val instanceof JiraIssueParameterValue) {
-                    String issueId = ((JiraIssueParameterValue) val).getValue().toString();
-                    if (issueIds.add(issueId)) {
-                        getLogger().finer("Added perforce issue " + issueId + " from build " + build);
+            ParametersDefinitionProperty paramDefProp = build.getParent().getProperty(
+                    ParametersDefinitionProperty.class);
+            for (ParameterDefinition paramDef : paramDefProp.getParameterDefinitions()) {
+                if (paramDef.getClass().isAssignableFrom(JiraIssueParameterDefinition.class)) {
+                    for (ParameterValue val : parameters.getParameters()) {
+                        if (val.getName().equals(paramDef.getName())) {
+                            String issueId = val.getValue().toString();
+                            if (issueIds.add(issueId)) {
+                                getLogger().finer("Added perforce issue " + issueId + " from build " + build);
+                            }
+                        }
                     }
                 }
             }
